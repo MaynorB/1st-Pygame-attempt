@@ -17,6 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.position = (x, y)
         self.velocity = (velocity_x, velocity_y)
         self.image = pygame.image.load(image_path)
+        self.image = pygame.transform.scale(self.image, (80, 60))
     
     def update(self):
         self.position = (self.position[0] + self.velocity[0], self.position[1] + self.velocity[1])
