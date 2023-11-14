@@ -58,7 +58,7 @@ pygame.init()
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Create a player sprite
-player = Player(320, 240, 0, 0, "Kermitgun.png")
+player = Player(320, 240, 0, 0, "Player_images/Kermitgun.png")
 
 
 
