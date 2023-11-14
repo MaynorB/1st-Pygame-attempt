@@ -1,41 +1,102 @@
 # Example file showing a circle moving on screen
 import pygame
 
+import random
+
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
+CLOCK = pygame.time.Clock()
+FPS = 60  # frame rate
+ANI = 4  # animation cycles
+PLAYER_MOVE_CONSTANT = 5 
+
+    
+class Player(pygame.sprite.Sprite):
+    def __init__(self, x, y, velocity_x, velocity_y, image_path):
+        super().__init__()
+        self.position = (x, y)
+        self.velocity = (velocity_x, velocity_y)
+        self.image = pygame.image.load(image_path)
+    
+    def update(self):
+        self.position = (self.position[0] + self.velocity[0], self.position[1] + self.velocity[1])
+    
+    def draw(self, surface):
+        surface.blit(self.image, self.position)
+
+    #Position Based Movement meaning it moves in x or y direction based on a constant delta
+    def pmove_left(self):
+        self.position = (self.position[0] - PLAYER_MOVE_CONSTANT, self.position[1])
+    
+    def pmove_right(self):
+        self.position = (self.position[0] + PLAYER_MOVE_CONSTANT, self.position[1])
+    
+    def pmove_up(self):
+        self.position = (self.position[0], self.position[1] - PLAYER_MOVE_CONSTANT)
+
+    def pmove_down(self):
+        self.position = (self.position[0], self.position[1] + PLAYER_MOVE_CONSTANT)
+    #Velocity Based meaning continous movement in one direction until interupted 
+    def vmove_left(self):
+        self.velocity = (-1,0)
+    
+    def vmove_right(self):
+        self.velocity = (1, 0)
+    
+    def vmove_up(self):
+        self.velocity = (0, -1)
+
+    def vmove_down(self):
+        self.velocity = (0, 1)
+
+
 # pygame setup
+# Initialize Pygame
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
-running = True
-dt = 0
 
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+# Create a window
+window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
+# Create a player sprite
+player = Player(320, 240, 0, 0, "Kermitgun.png")
+
+
+
+
+
+
+# Main game loop
+while True:
+    
+    # Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            pygame.quit()
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
-
-    pygame.draw.circle(screen, "red", player_pos, 40)
-
+    #Changes Player Movement
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
-        player_pos.y -= 300 * dt
-    if keys[pygame.K_s]:
-        player_pos.y += 300 * dt
-    if keys[pygame.K_a]:
-        player_pos.x -= 300 * dt
-    if keys[pygame.K_d]:
-        player_pos.x += 300 * dt
+    if keys[pygame.K_LEFT]:
+            player.pmove_left()
+    if keys[pygame.K_RIGHT]:
+            player.pmove_right()
+    if keys[pygame.K_UP]:
+            player.pmove_up()
+    if keys[pygame.K_DOWN]:
+            player.pmove_down()
 
-    # flip() the display to put your work on screen
-    pygame.display.flip()
+        
 
-    # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
-    dt = clock.tick(60) / 1000
+
+    
+
+    
+    # Clear the window
+    window.fill((255, 255, 255))
+    
+    # Draw the player sprite
+    player.draw(window)
+    
+    # Update the display
+    pygame.display.update()
+
+    CLOCK.tick(FPS)
