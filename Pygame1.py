@@ -10,7 +10,7 @@ CLOCK = pygame.time.Clock()
 FPS = 60  # frame rate
 ANI = 4  # animation cycles
 PLAYER_MOVE_CONSTANT = 5
-ENEMY_SPEED_CONSTANT = 2
+ENEMY_SPEED_CONSTANT = 0
 
 #Player, Enemies, Bullet Classes
 class Player(pygame.sprite.Sprite):
@@ -77,6 +77,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (80, 80))
         self.rect = self.image.get_rect(topleft=(x,y))
         self.position = pygame.math.Vector2((x,y)) 
+        ENEMY_SPEED_CONSTANT = random.randint(1,2)
         self.speed = ENEMY_SPEED_CONSTANT
     
     def update(self, player):
@@ -141,7 +142,7 @@ while True:
     player.update()
     enemies.update(player)
 
-    window.fill((0,0,0))
+    window.fill((225,0,0))
 
     
     player.draw(window)
